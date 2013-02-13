@@ -6,7 +6,7 @@ using namespace cv;
 const float diffThreshold = 3.0; // maximum amount of movement between successive frames (must be smaller in order to add a board)
 const float timeThreshold = 1.0; // minimum time between snapshots (seconds)
 
-const int preCalibrateCameraTimes = 20; // this is for calibrating the camera BEFORE starting projector calibration. 
+const int preCalibrateCameraTimes = 10; // this is for calibrating the camera BEFORE starting projector calibration. 
 const int startCleaningCamera = 8; // start cleaning outliers after this many samples (10 is ok...). Should be < than preCalibrateCameraTimes
 const float maxErrorCamera=0.2;
 
@@ -15,7 +15,7 @@ const int startCleaningProjector = 8;
 const int startDynamicProjectorPattern=5; // after this number of projector/camera calibration, the projection will start following the 
 // printed pattern to facilitate larger exploration of the field of view. If this number is larger than minNumGoodBoards, then this will never 
 // happen automatically. 
-const int minNumGoodBoards=20; // after this number of simultaneoulsy acquired "good" boards, IF the projector total reprojection error is smaller than a certain threshold, we end calibration (and move to AR mode automatically)
+const int minNumGoodBoards=7; // after this number of simultaneoulsy acquired "good" boards, IF the projector total reprojection error is smaller than a certain threshold, we end calibration (and move to AR mode automatically)
 
 
 // ****** INITIAL MODE ******
@@ -25,6 +25,7 @@ void testApp::setup() {
 	ofSetVerticalSync(true);
     
     cam.listDevices();
+	cam.setDeviceID(0);
 	cam.initGrabber(CAM_WIDTH, CAM_HEIGHT);
 	imitate(undistorted, cam);
 	imitate(previous, cam);
@@ -675,8 +676,8 @@ void testApp::saveExtrinsics(string filename, bool absolute) const {
     fs << "Rotation_Vector" << rotCamToProj;
     Mat rotCamToProj3x3;
     Rodrigues(rotCamToProj, rotCamToProj3x3);
-    fs << "Rotation_Matrix" << rotCamToProj3x3;
-    fs << "Translation_Vector" << transCamToProj;
+    fs << "rotation" << rotCamToProj3x3;
+    fs << "translation" << transCamToProj;
     // Saved as a 4x4 openGL like modelviw matrix:
     ofMatrix4x4 mat4x4=makeMatrix(rotCamToProj, transCamToProj);
     fs << "OpenGL_Mat" << "[";
@@ -713,6 +714,9 @@ void testApp::keyPressed(int key) {
     
     if (key=='d') displayAR=!displayAR; // this is just for test to see how it is going. But better not to use during 
     // calibration, because it interferes with the detection. 
+	if(key == 'f') {
+		ofToggleFullscreen();
+	}
 }
 
 

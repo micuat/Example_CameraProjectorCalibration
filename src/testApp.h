@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxCv.h"
+#include "ofxCv2.h"
 
 // ==================================================================
 // WE NEED TO DEFINE HERE the size of the computer screen and the projector screen. This cannot be done using ofGetScreenWidth() and the like
@@ -9,15 +9,19 @@
 // Of course, it would be possible to use a single screen (the projector) to perform the whole calibration (but we need a way to check if the 
 // printed pattern is visible - SOUND?).
 
-#define COMPUTER_DISP_WIDTH 1440
-#define COMPUTER_DISP_HEIGHT 900
+#define COMPUTER_DISP_WIDTH 1280
+#define COMPUTER_DISP_HEIGHT 800
 
 // RESOLUTION OF CAMERA AND PROJECTOR: 
 // - ideally, this should also be in a file (in particular if we want to calibrate several cameras/projectors). 
 // Resolution of the projector:
-#define PROJ_WIDTH   800 
-#define PROJ_HEIGHT  600
+#define PROJ_WIDTH   640 
+#define PROJ_HEIGHT  480
 
+/*#define COMPUTER_DISP_WIDTH 640
+#define COMPUTER_DISP_HEIGHT 480
+#define PROJ_WIDTH   1280
+#define PROJ_HEIGHT  800*/
 // Resolution of the camera (or at least resolution at which we want to calibrate it):
 #define CAM_WIDTH 640
 #define CAM_HEIGHT 480
