@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxCv2.h"
+#include "ofxLibdc.h"
 
 // ==================================================================
 // WE NEED TO DEFINE HERE the size of the computer screen and the projector screen. This cannot be done using ofGetScreenWidth() and the like
@@ -10,19 +11,21 @@
 // printed pattern is visible - SOUND?).
 
 #define COMPUTER_DISP_WIDTH 1280
-#define COMPUTER_DISP_HEIGHT 800
+#define COMPUTER_DISP_HEIGHT 1024
 
 // RESOLUTION OF CAMERA AND PROJECTOR: 
 // - ideally, this should also be in a file (in particular if we want to calibrate several cameras/projectors). 
 // Resolution of the projector:
-#define PROJ_WIDTH   640 
-#define PROJ_HEIGHT  480
+#define PROJ_WIDTH   1280
+#define PROJ_HEIGHT  1024
 
 /*#define COMPUTER_DISP_WIDTH 640
 #define COMPUTER_DISP_HEIGHT 480
 #define PROJ_WIDTH   1280
 #define PROJ_HEIGHT  800*/
 // Resolution of the camera (or at least resolution at which we want to calibrate it):
+//#define CAM_WIDTH 1032
+//#define CAM_HEIGHT 776
 #define CAM_WIDTH 640
 #define CAM_HEIGHT 480
 
@@ -42,7 +45,9 @@ public:
 	
     void initialization(CalibState initialmode); 
     
-	ofVideoGrabber cam;
+	ofxLibdc::Camera cam;
+	ofImage curFrame;
+//	ofVideoGrabber cam;
 	ofImage undistorted;
     
  	ofPixels previous; 

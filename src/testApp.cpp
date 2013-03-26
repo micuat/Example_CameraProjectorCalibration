@@ -24,12 +24,20 @@ CalibState InitialMode=AR_DEMO;//CAMERA_AND_PROJECTOR_PHASE1;//CAMERA_ONLY; //;/
 void testApp::setup() {
 	ofSetVerticalSync(true);
     
-    cam.listDevices();
-	cam.setDeviceID(0);
-	cam.initGrabber(CAM_WIDTH, CAM_HEIGHT);
-	imitate(undistorted, cam);
-	imitate(previous, cam);
-	imitate(diff, cam);
+	cam.setup();
+	cam.setBrightness(0);
+	cam.setGain(0);
+	cam.setExposure(1);
+	cam.setGammaAbs(1);
+	cam.setShutter(1);
+	cam.printFeatures();
+	
+//	while( !cam.grabVideo(curFrame) );
+//	curFrame.update();
+	curFrame.allocate(CAM_WIDTH, CAM_HEIGHT, OF_IMAGE_COLOR);
+	imitate(undistorted, curFrame);
+	imitate(previous, curFrame);
+	imitate(diff, curFrame);
     
 #ifdef MOVIE_PLAY
     eyeMovie.loadMovie("movies/ojo.mov");
@@ -109,13 +117,13 @@ void testApp::initialization(CalibState initialmode) {
 }
 
 void testApp::update() {
-	cam.update();
 #ifdef MOVIE_PLAY
     eyeMovie.idleMovie();
 #endif
     
-	if(cam.isFrameNew()) {		
-		Mat camMat = toCv(cam); // current image to process
+	if(cam.grabVideo(curFrame)) {
+		curFrame.update();
+		Mat camMat = toCv(curFrame); // current image to process
         
 		Mat prevMat = toCv(previous);
 		Mat diffMat = toCv(diff);
@@ -436,6 +444,7 @@ void testApp::draw() {
     stringstream intrinsicsProjector, intrinsicsCamera;
     
     ofSetWindowPosition(0,0); 
+    ofSetWindowShape(COMPUTER_DISP_WIDTH + PROJ_WIDTH, COMPUTER_DISP_HEIGHT + PROJ_HEIGHT);
     
     // NOTE: we take the convention here of (0,0) at upper-left point (this is 
     // the reverse of OpenGL)
@@ -451,7 +460,7 @@ void testApp::draw() {
     
     // Draw current acquired image:
     ofSetColor(255);
-    cam.draw(0,0, CAM_WIDTH, CAM_HEIGHT);
+    curFrame.draw(0,0, CAM_WIDTH, CAM_HEIGHT);
     
     // Draw preprocessed images for camera and projector board detection (we need to do the preprocessing BEFORE calling the detection functions):
     calibrationCamera.drawPreprocessedImage(CAM_WIDTH, 0, CAM_WIDTH/2, CAM_HEIGHT/2);
