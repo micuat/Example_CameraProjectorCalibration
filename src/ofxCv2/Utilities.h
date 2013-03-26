@@ -22,6 +22,10 @@ namespace ofxCv {
 	// is used for small objects where the compiler can optimize the copying if
 	// necessary. the reference is avoided to make inline toCv/toOf use easier.
 	
+	inline int getCvImageType(int channels, int depth = CV_8U);
+	inline int getCvImageType(ofImageType imageType, int depth = CV_8U);
+	template <class T> inline int getCvImageType(T& img);
+	
 	// toCv functions
 	Mat toCv(Mat& mat);
 	template <class T> inline Mat toCv(ofPixels_<T>& pix) {
@@ -118,10 +122,10 @@ namespace ofxCv {
 	}
 	
 	// image type
-	inline int getCvImageType(int channels, int depth = CV_8U) {
+	inline int getCvImageType(int channels, int depth) {
 		return CV_MAKETYPE(depth, channels);
 	}
-	inline int getCvImageType(ofImageType imageType, int depth = CV_8U) {
+	inline int getCvImageType(ofImageType imageType, int depth) {
 		return CV_MAKETYPE(depth, getChannels(imageType));
 	}
 	template <class T> inline int getCvImageType(T& img) {
