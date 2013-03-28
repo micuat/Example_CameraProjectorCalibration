@@ -24,6 +24,15 @@ CalibState InitialMode=AR_DEMO;//CAMERA_AND_PROJECTOR_PHASE1;//CAMERA_ONLY; //;/
 void testApp::setup() {
 	ofSetVerticalSync(true);
     
+	FileStorage pctfs(ofToDataPath("ProCamToolkit.yml"), FileStorage::READ);
+	int devID;
+	
+//	pctfs["proWidth"] >> tw;
+//	pctfs["proHeight"] >> th;
+	pctfs["camWidth"] >> CAM_WIDTH;
+	pctfs["camHeight"] >> CAM_HEIGHT;
+	pctfs["devID"] >> devID;
+	
 	camVec.push_back(new ofxLibdc::Camera());
 	camVec.push_back(new ofxLibdc::Camera());
 	
@@ -31,7 +40,7 @@ void testApp::setup() {
 	for( cam = camVec.begin(); cam < camVec.end(); cam++ ) {
 		(*cam)->setup(i);
 		(*cam)->set1394b(true);
-		(*cam)->setSize(0, 0);
+		(*cam)->setSize(CAM_WIDTH, CAM_HEIGHT);
 		(*cam)->setFrameRate(1);
 		(*cam)->setBrightness(0);
 		(*cam)->setGain(0);
@@ -41,8 +50,7 @@ void testApp::setup() {
 		(*cam)->printFeatures();
 		i++;
 	}
-	cam = camVec.begin();
-	cam++;
+	cam = camVec.begin() + devID;
 	(*cam)->setFrameRate(30);
 	(*cam)->setSize(CAM_WIDTH, CAM_HEIGHT);
 	

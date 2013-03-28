@@ -24,10 +24,8 @@
 #define PROJ_WIDTH   1280
 #define PROJ_HEIGHT  800*/
 // Resolution of the camera (or at least resolution at which we want to calibrate it):
-#define CAM_WIDTH 1032
-#define CAM_HEIGHT 776
-//#define CAM_WIDTH 640
-//#define CAM_HEIGHT 480
+//#define CAM_WIDTH 1032
+//#define CAM_HEIGHT 776
 
 // for test:
 //#define MOVIE_PLAY
@@ -45,6 +43,8 @@ public:
 	
     void initialization(CalibState initialmode); 
     
+	int CAM_WIDTH, CAM_HEIGHT;
+	
 	vector<ofxLibdc::Camera *> camVec;
 	ofxLibdc::Camera camera1;
 	ofxLibdc::Camera camera2;
