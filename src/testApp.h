@@ -10,8 +10,8 @@
 // Of course, it would be possible to use a single screen (the projector) to perform the whole calibration (but we need a way to check if the 
 // printed pattern is visible - SOUND?).
 
-#define COMPUTER_DISP_WIDTH 1280
-#define COMPUTER_DISP_HEIGHT 1024
+#define COMPUTER_DISP_WIDTH 1920
+#define COMPUTER_DISP_HEIGHT 1080
 
 // RESOLUTION OF CAMERA AND PROJECTOR: 
 // - ideally, this should also be in a file (in particular if we want to calibrate several cameras/projectors). 
@@ -24,10 +24,10 @@
 #define PROJ_WIDTH   1280
 #define PROJ_HEIGHT  800*/
 // Resolution of the camera (or at least resolution at which we want to calibrate it):
-//#define CAM_WIDTH 1032
-//#define CAM_HEIGHT 776
-#define CAM_WIDTH 640
-#define CAM_HEIGHT 480
+#define CAM_WIDTH 1032
+#define CAM_HEIGHT 776
+//#define CAM_WIDTH 640
+//#define CAM_HEIGHT 480
 
 // for test:
 //#define MOVIE_PLAY
@@ -45,7 +45,11 @@ public:
 	
     void initialization(CalibState initialmode); 
     
-	ofxLibdc::Camera cam;
+	vector<ofxLibdc::Camera *> camVec;
+	ofxLibdc::Camera camera1;
+	ofxLibdc::Camera camera2;
+	vector<ofxLibdc::Camera *>::iterator cam;
+	
 	ofImage curFrame;
 //	ofVideoGrabber cam;
 	ofImage undistorted;

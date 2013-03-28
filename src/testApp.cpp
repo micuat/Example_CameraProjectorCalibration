@@ -24,13 +24,27 @@ CalibState InitialMode=AR_DEMO;//CAMERA_AND_PROJECTOR_PHASE1;//CAMERA_ONLY; //;/
 void testApp::setup() {
 	ofSetVerticalSync(true);
     
-	cam.setup();
-	cam.setBrightness(0);
-	cam.setGain(0);
-	cam.setExposure(1);
-	cam.setGammaAbs(1);
-	cam.setShutter(1);
-	cam.printFeatures();
+	camVec.push_back(new ofxLibdc::Camera());
+	camVec.push_back(new ofxLibdc::Camera());
+	
+	int i = 0;
+	for( cam = camVec.begin(); cam < camVec.end(); cam++ ) {
+		(*cam)->setup(i);
+		(*cam)->set1394b(true);
+		(*cam)->setSize(0, 0);
+		(*cam)->setFrameRate(1);
+		(*cam)->setBrightness(0);
+		(*cam)->setGain(0);
+		(*cam)->setExposure(1);
+		(*cam)->setGammaAbs(1);
+		(*cam)->setShutter(1);
+		(*cam)->printFeatures();
+		i++;
+	}
+	cam = camVec.begin();
+	cam++;
+	(*cam)->setFrameRate(30);
+	(*cam)->setSize(CAM_WIDTH, CAM_HEIGHT);
 	
 //	while( !cam.grabVideo(curFrame) );
 //	curFrame.update();
@@ -121,7 +135,7 @@ void testApp::update() {
     eyeMovie.idleMovie();
 #endif
     
-	if(cam.grabVideo(curFrame)) {
+	if((*cam)->grabVideo(curFrame)) {
 		curFrame.update();
 		Mat camMat = toCv(curFrame); // current image to process
         
